@@ -1,13 +1,9 @@
-# import Vuln_scan
+import xss_scanner
 
-# target_url = 'http://hackthissite.com'
-# scan = Vuln_scan.Scanner(target_url)
-# scan.crawl(target_url)
+target_url = 'http://10.0.2.14/bWAPP'
+scan = xss_scanner.Scanner(target_url)
+scan.run()
 
-# import keylogger
-# import sys
-# import getopt
 
-# keylog = keylogger.Keylogger()
-# keylog.start()
+
 
