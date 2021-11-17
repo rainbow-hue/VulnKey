@@ -23,5 +23,5 @@ class Scanner:
                 self.target_links.append(link)
                 print(link)
                 self.crawl(link)
-#
+
 
