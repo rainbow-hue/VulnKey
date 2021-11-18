@@ -1,6 +1,6 @@
 import xss_scanner
 
-target_url = 'http://10.0.2.14/bWAPP'
+target_url = 'http://sudo.co.il/xss/'
 scan = xss_scanner.Scanner(target_url)
 scan.run()
 
