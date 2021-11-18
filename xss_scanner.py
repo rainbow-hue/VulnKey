@@ -1,39 +1,34 @@
 import requests
-import re
 from urllib.parse import urljoin
 from bs4 import BeautifulSoup
 
 class Scanner:
     def __init__(self, url):
         self.target_url = url
-        self.target_links = []
         self.session = requests.Session()
-    
-    def extract_links(self, url):
-        response = requests.get(url)
-        return re.findall('(?:href=*)(.*?)*', response.content.decode('utf-8'))
+        self.pages_crawled = [url]
 
-    def crawl(self, url=None):
+    def crawler(self, url=None):
         if url is None:
             url = self.target_url
+        page = self.session.get(url)
+        soup = BeautifulSoup(page.text, 'html.parser')
+        links = soup.find_all('a')
 
-        href_links = self.extract_links(url)
-        for link in href_links:
-            link = urljoin(url, link)
-
-            if "#" in link:
-                link = link.split("#")[0]
-            
-            if self.target_url in link and link not in self.target_links:
-                self.target_links.append(link)
-                print("[FOUND] " + link)
-                self.crawl(link)
+        for link in links:
+            if 'href' in link.attrs:
+                if ':' not in link['href']:
+                    new_link = url + link['href']
+                    if new_link not in self.pages_crawled:
+                        self.pages_crawled.append(new_link)
+                        print("[FOUND] "+ new_link)
+                        self.crawler(new_link)
 
     def extract_forms(self, url):
         response = self.session.get(url)
 
-        parsed_html = BeautifulSoup(response.content)
-        return parsed_html.findAll("forms")
+        parsed_html = BeautifulSoup(response.content, features="lxml")
+        return parsed_html.findAll("form")
 
     def submit_form(self, form, value, url):
         action = form.get("action")
@@ -60,18 +55,18 @@ class Scanner:
     def xss_in_form(self, form, url):
         xss_script = "<Script>alert(\"Vulnerable\")</scripT>"
         response = self.submit_form(form, xss_script, url)
-        return xss_script in response.content
+        return xss_script in response.text
 
     def xss_in_link(self, url):
         xss_script = "<Script>alert(\"Vulnerable\")</scripT>"
         url = url.replace("=", "=" + xss_script)
         response = self.session.get(url)
-        return xss_script in response.content
+        return xss_script in response.text
 
     def run(self):
-        self.crawl()
+        self.crawler()
 
-        for link in self.target_links:
+        for link in self.pages_crawled:
             forms = self.extract_forms(link)
             for form in forms:
                 print("\n\n[-->] Testing form in " + link)
@@ -81,7 +76,7 @@ class Scanner:
 
             if "=" in link:
                 print("\n\n[-->] Testing " + link)
-                if self.xss_in_form(link):
+                if self.xss_in_link(link):
                     print("[YAY] XSS discovered in " + link)
     
 
