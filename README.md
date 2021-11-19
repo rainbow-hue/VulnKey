@@ -1,4 +1,4 @@
-# VulnKey
+# VulnKey - Keylogger and XSS Scanner
 
 **Description →**
 
