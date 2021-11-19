@@ -7,7 +7,6 @@ A vulnerability scanner, in its most basic form, scans a website to check whethe
 With VulnKey, you can log keystrokes, scan for XSS vulnerabilities, or do both.
 
 
-
 **Features of VulnKey →**
 
 It can be used to test keyboard keys on your computer.
@@ -17,8 +16,18 @@ It can be used to test websites for XSS vulnerabilities.
 **Requirements →**
 
 Install *pynput* module using the command *pip install pynput*
+Install the missing modules (if any) using command *pip install [module name]*
 
 **Usage →**
+
+Open CMD/Terminal in the vulnkey directory.
+Run: *python vulnkey -h[or --help]* for help menu
+
+Example commands for refernce
+- *python vulnkey -k -h* --> prints out the keylogger help menu
+- *python vulnkey --xss-scanner* --> starts the xss scanner for a default website
+- *python vulnkey --keylogger --email [email]* --> starts the keylogger and sends keystorkes to the *email* specified
+
 
 
 
