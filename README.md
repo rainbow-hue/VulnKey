@@ -23,6 +23,7 @@ Install the missing modules (if any) using command *pip install [module name]*
 Open CMD/Terminal in the vulnkey directory.
 Run: *python vulnkey -h[or --help]* for help menu
 
+
 Example commands for refernce
 - *python vulnkey -k -h* --> prints out the keylogger help menu
 - *python vulnkey --xss-scanner* --> starts the xss scanner for a default website
