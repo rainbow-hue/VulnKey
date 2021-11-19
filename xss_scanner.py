@@ -42,7 +42,7 @@ class Scanner:
 
         for link in links:
             if 'href' in link.attrs:
-                if ':' not in link['href']:
+                if ':' not in link['href'] and '#' not in link['href']:
                     new_link = url + link['href']
                     if new_link not in self.pages_crawled:
                         self.pages_crawled.append(new_link)
@@ -105,8 +105,7 @@ class Scanner:
                 if self.xss_in_link(link):
                     print("[YAY] XSS discovered in " + link)
 
-    def __del__(self):
-        print("\n[DONE]")
+        print("[DONE]")
     
 
 

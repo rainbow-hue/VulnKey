@@ -22,12 +22,20 @@ try:
                     exit()
 
                 if currentArgument in ("-k", "--keylogger"):
-                    keylogger = keylogger.Keylogger()
-                    keylogger.start()
+                    try:
+                        keylogger = keylogger.Keylogger()
+                        keylogger.start()
+                    except KeyboardInterrupt:
+                        exit()
 
                 if currentArgument in ("-x","--xss-scanner"):
-                    scanner = xss_scanner.Scanner()
-                    scanner.run()
+                    try:
+                        scanner = xss_scanner.Scanner()
+                        scanner.run()
+                    except KeyboardInterrupt:
+                        print("^C")
+                        exit()
+
 except getopt.error as err:
     print(str(err))
     exit()

