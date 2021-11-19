@@ -1,12 +1,37 @@
 import requests
 from urllib.parse import urljoin
 from bs4 import BeautifulSoup
+import sys
+import getopt
 
 class Scanner:
-    def __init__(self, url):
-        self.target_url = url
+    def __init__(self):
+        self.argument_list = sys.argv[2:]
+        self.target_url = 'http://sudo.co.il/xss/'
         self.session = requests.Session()
-        self.pages_crawled = [url]
+        self.pages_crawled = []
+
+        self.options = "hu:"
+        self.long_options = ["help","url"]
+
+        try:
+            arguments, values = getopt.getopt(self.argument_list, self.options, self.long_options)
+
+            for currentArgument, currentValue in arguments:
+                if currentArgument in ("-h","--help"):
+                    print("             XSS SCANNER             \n")
+                    print("-u or --url      -       to specify the url in this format (http[s]://[domain])")
+                    print("-h or --help     -       for this menu")
+                    print("\n default url is --> http://sudo.co.il/xss/\n\n")
+                    exit()
+                
+                elif currentArgument in ("-u", "--url"):
+                    self.target_url = currentValue
+                    self.pages_crawled.append(currentValue)
+        except getopt.error as err:
+            print(str(err))
+            exit()
+
 
     def crawler(self, url=None):
         if url is None:
@@ -64,6 +89,7 @@ class Scanner:
         return xss_script in response.text
 
     def run(self):
+        print("\n\nRunning for URL: %s\n\n" % self.target_url)
         self.crawler()
 
         for link in self.pages_crawled:
@@ -78,6 +104,9 @@ class Scanner:
                 print("\n\n[-->] Testing " + link)
                 if self.xss_in_link(link):
                     print("[YAY] XSS discovered in " + link)
+
+    def __del__(self):
+        print("\n[DONE]")
     
 
 
