@@ -72,7 +72,8 @@ class Keylogger:
         if key == pynput.keyboard.Key.end:
             # Stop listener and timer
             self.timer.cancel()
-            self.file1.close()
+            if self.choose_report_method == 0:
+                self.file1.close()
             print("\nKeylogger stopped.")
             exit()
 
